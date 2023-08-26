@@ -19,8 +19,6 @@ load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-MONGO_URI = os.getenv('MONGO_URI')
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -37,6 +35,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     "app",
+    "rest_framework",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -78,6 +77,19 @@ WSGI_APPLICATION = "TGLBlog.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
+
+MONGO_URI = os.getenv('MONGO_URI')
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'djongo',
+        'NAME': 'TGLBlog',
+        'CLIENT': {
+            'host': os.getenv('MONGO_URI'),  # URL de tu servidor MongoDB
+            'maxPoolSize': 10,
+        }
+    }
+}
 
 # DATABASES = {
 #     "default": {
@@ -127,3 +139,20 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+#Redis
+
+BROKER_URL = os.getenv('REDIS_URI')
+CELERY_ACCEPT_CONTENT = ['json', 'pickle']
+CELERY_TASK_SERIALIZER = 'pickle'
+CELERY_RESULT_SERIALIZER = 'pickle'
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+
+#Mail config
+
+AWS_SES_REGION = 'us-west-2'
+AWS_ACCESS_KEY_ID = 'AKIATXVX5DKAOMGAGJPT'
+AWS_SECRET_ACCESS_KEY = '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'
+EMAIL_BACKEND = 'django_ses.SESBackend'
+AWS_SES_REGION_NAME = 'us-west-2'
+AWS_SES_REGION_ENDPOINT = 'email.us-west-2.amazonaws.com'

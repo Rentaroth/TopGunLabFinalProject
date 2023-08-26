@@ -1,52 +1,41 @@
-from umongo import Document, fields
-from django.utils import timezone
-from .db_connection import instance
+from djongo.models import ManyToOneRel
+from djongo.models.fields import ObjectId
 
-@instance.register
-class Users(Document):
-  name = fields.StringField(max_length=20)
-  nickname = fields.StringField(max_length=20)
-  password = fields.StringField(min_length=8)
-  email = fields.EmailField(allow_utf8_Users=True)
-  created_at = fields.DateTimeField(default=timezone.now())
-  updated_at = fields.DateTimeField(default=timezone.now())
+from djongo import models
 
-  class Meta:
-    collection_name = 'users'
+class Users(models.Model):
+  _id = models.ObjectIdField(primary_key=True, default=ObjectId)
+  name = models.CharField(max_length=20, unique=True)
+  nickname = models.CharField(max_length=20, unique=True)
+  password = models.CharField(max_length=40)
+  email = models.EmailField(unique=True)
+  verified = models.BooleanField(default=False)
+  created_at = models.DateTimeField(auto_now=True)
+  updated_at = models.DateTimeField(auto_now=True)
 
-@instance.register
-class Categories(Document):
-  category = fields.StringField()
+class Categories(models.Model):
+  _id = models.ObjectIdField(primary_key=True, default=ObjectId)
+  category = models.CharField(max_length=20)
 
-  class Meta:
-    collection_name = 'categories'
+class Tags(models.Model):
+  _id = models.ObjectIdField(primary_key=True, default=ObjectId)
+  tag = models.CharField(max_length=20)
 
-@instance.register
-class Tags(Document):
-  tag = fields.StringField()
+class Posts(models.Model):
+  _id = models.ObjectIdField(primary_key=True, default=ObjectId)
+  title = models.CharField(max_length=20)
+  content = models.TextField()
+  status = models.CharField(max_length=8)
+  user_id = models.ForeignKey(to=Users, on_delete=models.CASCADE, db_column='user_id')
+  category_id = models.ForeignKey(to=Categories, on_delete=models.CASCADE, db_column='category_id')
+  tag_id = models.ManyToManyField(to=Tags, on_delete=models.CASCADE, db_column='category_id')
+  created_at = models.DateTimeField(auto_now=True)
+  updated_at = models.DateTimeField(auto_now=True)
 
-  class Meta:
-    collection_name = 'tags'
-
-@instance.register
-class Posts(Document):
-  title = fields.StringField(max_length=20)
-  content = fields.StringField()
-  status = fields.StringField(max_length=8)
-  Users_id = fields.ReferenceField(Users)
-  category_id = fields.ReferenceField(Categories)
-  created_at = fields.DateTimeField(default=timezone.now())
-  updated_at = fields.DateTimeField(default=timezone.now())
-
-  class Meta:
-    collection_name = 'posts'
-
-@instance.register
-class Comments(Document):
-  comment = fields.StringField()
-  Users_id = fields.IntegerField()
-  post_id = fields.IntegerField()
-  created_at = fields.DateTimeField(default=timezone.now())
-
-  class Meta:
-    collection_name = 'comments'
+class Comments(models.Model):
+  _id = models.ObjectIdField(primary_key=True, default=ObjectId)
+  comment = models.TextField()
+  user_id = models.ForeignKey(to=Users, on_delete=models.CASCADE, db_column='user_id')
+  post_id = models.ForeignKey(to=Posts, on_delete=models.CASCADE, db_column='post_id')
+  created_at = models.DateTimeField(auto_now=True)
+  updated_at = models.DateTimeField(auto_now=True)
