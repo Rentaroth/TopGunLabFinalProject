@@ -28,7 +28,7 @@ class Posts(models.Model):
   status = models.CharField(max_length=8)
   user_id = models.ForeignKey(to=Users, on_delete=models.CASCADE, db_column='user_id')
   category_id = models.ForeignKey(to=Categories, on_delete=models.CASCADE, db_column='category_id')
-  tag_id = models.ManyToManyField(to=Tags, on_delete=models.CASCADE, db_column='category_id')
+  tag_id = models.ManyToManyField(to=Tags, db_column='category_id')
   created_at = models.DateTimeField(auto_now=True)
   updated_at = models.DateTimeField(auto_now=True)
 

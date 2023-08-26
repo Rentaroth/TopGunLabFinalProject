@@ -12,3 +12,6 @@ class PostRepository(BaseRepository):
     obj = self.read.delay(self, self.model, id)
     result = obj.get(timeout=None)
     return result
+
+  def post_search(self, content):
+    obj = self.model.objects.filter()
