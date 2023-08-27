@@ -9,4 +9,5 @@ urlpatterns = [
   path('posts/<str:id>', PostsView.as_view(), name='posts_id'),
   path('comments', CommentsView.as_view(), name='comments'),
   path('comments/<str:id>', CommentsView.as_view(), name='comments_id'),
+  path('searchbar', SearchView.as_view(), name='searchbar'),
 ]

@@ -129,5 +129,16 @@ class CommentsView(APIView):
       print(error)
       return JsonResponse({'error': error})
 
+class SearchView(APIView):
+  def post(self, request):
+    data = request.data['data']
+    try:
+      service = PostService(**data)
+      result = service.PostSearchService()
+      return JsonResponse({'body': result})
+    except DatabaseError as error:
+      print(error)
+      return JsonResponse({'error': error})
+
 def index(request):
   return HttpResponse('Hello world!')
