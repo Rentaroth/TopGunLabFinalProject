@@ -36,3 +36,10 @@ class CommentSerializer(serializers.Serializer):
   class Meta:
     model = Comments
     fields = '__all__'
+
+class CategorySerializer(serializers.Serializer):
+  category = serializers.CharField()
+
+  class Meta:
+    model = Categories
+    fields = '__all__'

@@ -98,8 +98,15 @@ class PostService(PostRepository):
   def PostSearchService(self):
     filters = {
       'title': self.search_title,
-      'start_date': tz_parser_nozone(self.search_start_date),
     }
+    if self.search_start_date:
+      filters.update({
+        'start_date': tz_parser_nozone(self.search_start_date),
+      })
+    else:
+      filters.update({
+        'start_date': tz_parser_nozone('1990-01-01'),
+      })
     if self.search_end_date:
       filters.update({
         'end_date': tz_parser_nozone(self.search_end_date),
@@ -121,5 +128,4 @@ class PostService(PostRepository):
       print(error)
       return ''
 
-    
     

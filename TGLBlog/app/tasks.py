@@ -1,4 +1,4 @@
-from celery import shared_task
+from celery import shared_task, current_app
 from django.core.mail import send_mail
 
 @shared_task

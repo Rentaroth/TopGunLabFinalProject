@@ -14,7 +14,16 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 app.conf.update(CELERY_IMPORTS = (
   'app.tasks',
   'app.repositories.base_repository',
+  'app.repositories.user_repository',
+  'app.utilities.country_data',
 ))
+app.conf.beat_schedule = {
+    'my-periodic-task': {
+        'task': 'app.utilities.country_data.periodic_country_api_call',
+        'schedule': 3600,  # Intervalo de tiempo entre ejecuciones
+        'options': {'expires': 60}
+    },
+}
 
 def on_failure(exc, task_id, args, kwargs, einfo):
   return print({'task_id': task_id, 'message': einfo})
