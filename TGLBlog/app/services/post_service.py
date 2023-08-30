@@ -1,6 +1,8 @@
 from app.repositories.post_repository import PostRepository
 from app.serializers import PostSerializer
 from .user_service import UserService
+from .category_service import CategoryService
+from .tag_service import TagService
 from app.utilities.time_parser import tz_parser_nozone
 
 from django.utils import timezone
@@ -10,7 +12,7 @@ from bson import ObjectId
 
 class PostService(PostRepository):
   serializer = PostSerializer
-  def __init__(self, id = None, title= None, content = None, status = None, user_id = None, category_id = None, search_title = None, search_start_date = None, search_end_date = None):
+  def __init__(self, id = None, title= None, content = None, status = None, user_id = None, category_id = None, tag_id=None, search_title = None, search_start_date = None, search_end_date = None):
     super().__init__()
     self.id = id
     self.title = title
@@ -18,6 +20,7 @@ class PostService(PostRepository):
     self.status = status
     self.user_id = user_id
     self.category_id = category_id
+    self.tag_id = tag_id
     self.search_title = search_title
     self.search_start_date = search_start_date
     self.search_end_date = search_end_date
@@ -30,7 +33,8 @@ class PostService(PostRepository):
       'content': self.content,
       'status': self.status,
       'user_id': self.user_id,
-      #'category_id': self.category_id,
+      'category_id': self.category_id,
+      'tag_id': self.tag_id,
       'created_at': created.__str__(),
       'updated_at': updated.__str__(),
     }
@@ -38,16 +42,24 @@ class PostService(PostRepository):
     if validator.is_valid():
       validated = dict(validator.validated_data)
       user_instance = UserService(id=self.user_id)
-      user_obj = user_instance.user_objcet_obtention()
+      user_obj = user_instance.user_object_obtention()
+      category_instance = CategoryService(id=self.category_id)
+      category_obj = category_instance.obtain_one_category()
+      tag_instance = TagService(id=self.tag_id)
+      tag_obj = tag_instance.obtain_one_tag()
       validated.update({
         'user_id': user_obj,
-        # 'category_id': ObjectId(self.category_id),
+        'category_id': category_obj,
         'created_at': validator.validated_data['created_at'].__str__(),
         'updated_at': validator.validated_data['updated_at'].__str__(),
       })
       creation_task = self.create.delay(self, self.model, validated)
       result = creation_task.get(timeout=None)
-      result['user_id'] = self.user_id
+      if type(result) == type({}):
+        result.update({
+          'user_id': self.user_id,
+          'category_id': self.category_id,
+        })
       return result
     else:
       print(validator.error_messages)
@@ -58,8 +70,12 @@ class PostService(PostRepository):
     obj = self.read.delay(self, self.model, id)
     result = obj.get(timeout=None)
     res = model_to_dict(result)
-    res['_id'] = res['_id'].__str__()
-    res['user_id'] = res['user_id'].__str__()
+    res.update({
+      '_id': res['_id'].__str__(),
+      'user_id': res['user_id'].__str__(),
+      'category_id': res['category_id'].__str__(),
+      'tag_id': res['tag _id'].__str__(),
+    })
     return res
 
   def PostUpdateService(self):
@@ -70,7 +86,7 @@ class PostService(PostRepository):
       'content': self.content,
       'status': self.status,
       'user_id': self.user_id,
-      # 'category_id': self.category_id,
+      'category_id': self.category_id,
       'updated_at': updated.__str__(),
     }
     data = {i:j for i, j in data_collector.items() if j is not None}

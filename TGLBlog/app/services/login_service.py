@@ -2,6 +2,7 @@ import jwt
 from app.serializers import UserSerializer
 from app.repositories.user_repository import UserRepository
 from django.conf import settings
+from datetime import datetime, timedelta
 
 class LoginService(UserRepository):
   serializer = UserSerializer
@@ -16,7 +17,8 @@ class LoginService(UserRepository):
     obj = self.login.delay(self)
     inst = obj.get(timeout=None)
     inst.update({
-      '_id': inst['_id'].__str__()
+      '_id': inst['_id'].__str__(),
+      'exp': datetime.utcnow() + timedelta(hours=24)
     })
     token = jwt.encode(inst, settings.SECRET_KEY)
     return token

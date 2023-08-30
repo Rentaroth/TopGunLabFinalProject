@@ -12,4 +12,6 @@ urlpatterns = [
   path('searchbar', SearchView.as_view(), name='searchbar'),
   path('categories', CategoriesView.as_view(), name='categories'),
   path('tags', TagsView.as_view(), name='tags'),
+  path('repost/<str:id>', RepostView.as_view(), name='repost'),
+  path('likes/<str:id>', LikesView.as_view(), name='likes'),
 ]

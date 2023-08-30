@@ -7,6 +7,7 @@ class UserSerializer(serializers.Serializer):
   nickname = serializers.CharField(max_length=20)
   password = serializers.CharField(min_length=8)
   email = serializers.EmailField()
+  country = serializers.CharField()
   created_at = serializers.DateTimeField(default=timezone.now().__str__())
   updated_at = serializers.DateTimeField(default=timezone.now().__str__())
 
@@ -19,12 +20,28 @@ class PostSerializer(serializers.Serializer):
   content = serializers.CharField()
   status = serializers.CharField(max_length=8)
   user_id = serializers.CharField(max_length=24)
-  #category_id = serializers.CharField(max_length=24)
+  category_id = serializers.CharField(max_length=24)
   created_at = serializers.DateTimeField(default=timezone.now().__str__())
   updated_at = serializers.DateTimeField(default=timezone.now().__str__())
   
   class Meta:
     model = Posts
+    fields = '__all__'
+
+class RepostSerializer(serializers.Serializer):
+  user_id = serializers.CharField(max_length=24)
+  post_id = serializers.CharField(max_length=24)
+
+  class Meta:
+    model = Reposts
+    fields = '__all__'
+
+class PostsLikesSerializer(serializers.Serializer):
+  user_id = serializers.CharField(max_length=24)
+  post_id = serializers.CharField(max_length=24)
+
+  class Meta:
+    model = PostsLikes
     fields = '__all__'
 
 class CommentSerializer(serializers.Serializer):

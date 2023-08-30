@@ -8,7 +8,7 @@ class PostRepository(BaseRepository):
   def __init__(self):
     super().__init__()
 
-  def post_objcet_obtention(self):
+  def post_object_obtention(self):
     id = ObjectId(self.id)
     obj = self.read.delay(self, self.model, id)
     result = obj.get(timeout=None)

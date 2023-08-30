@@ -33,9 +33,9 @@ class CommentService(CommentRepository):
         'created_at': validator['created_at'].__str__(),
       })
       user_instance = UserService(id=validated['user_id'])
-      user_obj = user_instance.user_objcet_obtention()
+      user_obj = user_instance.user_object_obtention()
       post_instance = PostService(id=validated['post_id'])
-      post_obj = post_instance.post_objcet_obtention()
+      post_obj = post_instance.post_object_obtention()
       validated.update({
         'user_id': user_obj,
         'post_id': post_obj,

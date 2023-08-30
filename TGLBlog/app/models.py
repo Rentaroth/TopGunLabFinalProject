@@ -7,6 +7,7 @@ class Users(models.Model):
   nickname = models.CharField(max_length=20, unique=True)
   password = models.CharField(max_length=40)
   email = models.EmailField(unique=True)
+  country = models.CharField(max_length=20)
   verified = models.BooleanField(default=False)
   created_at = models.DateTimeField(auto_now=True)
   updated_at = models.DateTimeField(auto_now=True)
@@ -29,6 +30,16 @@ class Posts(models.Model):
   tag_id = models.ManyToManyField(to=Tags, db_column='tag_id')
   created_at = models.DateTimeField(auto_now=True)
   updated_at = models.DateTimeField(auto_now=True)
+
+class Reposts(models.Model):
+  _id = models.ObjectIdField(primary_key=True, default=ObjectId)
+  user_id = models.ForeignKey(to=Users, on_delete=models.CASCADE, db_column='user_id')
+  post_id = models.ForeignKey(to=Posts, on_delete=models.CASCADE, db_column='post_id')
+
+class PostsLikes(models.Model):
+  _id = models.ObjectIdField(primary_key=True, default=ObjectId)
+  user_id = models.ForeignKey(to=Users, on_delete=models.CASCADE, db_column='user_id')
+  post_id = models.ForeignKey(to=Posts, on_delete=models.CASCADE, db_column='post_id')
 
 class Comments(models.Model):
   _id = models.ObjectIdField(primary_key=True, default=ObjectId)

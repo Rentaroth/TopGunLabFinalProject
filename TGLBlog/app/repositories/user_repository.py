@@ -4,6 +4,7 @@ from app.models import Users
 
 from celery import shared_task
 from app.tasks import confirm_mail
+from bson import ObjectId
 
 import jwt
 from django.contrib.auth.hashers import check_password
@@ -24,9 +25,9 @@ class UserRepository(BaseRepository):
     else:
       return "User couldn't be created."
   
-  def user_objcet_obtention(self):
+  def user_object_obtention(self):
     if self.id:
-      obj = self.read.delay(self, self.model, self.id)
+      obj = self.read.delay(self, self.model, ObjectId(self.id))
     elif self.nickname:
       obj = get_object_or_404(self.model, nickname=self.nickname)
       return obj

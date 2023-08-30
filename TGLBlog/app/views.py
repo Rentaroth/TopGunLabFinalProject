@@ -6,6 +6,8 @@ from .services.comment_service import CommentService
 from .services.category_service import CategoryService
 from .services.login_service import LoginService
 from .services.tag_service import TagService
+from .services.repost_service import RepostService
+from .services.likes_service import LikesService
 from rest_framework.views import APIView
 from .models import *
 from .serializers import *
@@ -65,6 +67,26 @@ class PostsView(APIView):
   def delete(self, request, id):
     service = PostService(id=id)
     result = service.PostDeleteService()
+    return JsonResponse({'body': result})
+
+class RepostView(APIView):
+  def post(self, request, id):
+    data = request.data['data']
+    data.update({
+      'user_id': id
+    })
+    service = RepostService(**data)
+    result = service.RepostCreationService()
+    return JsonResponse({'body': result})
+
+class LikesView(APIView):
+  def post(self, request, id):
+    data = request.data['data']
+    data.update({
+      'user_id': id
+    })
+    service = LikesService(**data)
+    result = service.LikesCreationService()
     return JsonResponse({'body': result})
 
 class CommentsView(APIView):
