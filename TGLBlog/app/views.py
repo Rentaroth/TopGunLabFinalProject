@@ -50,6 +50,7 @@ class PostsView(APIView):
     data = request.data['data']
     service = PostService(**data)
     result = service.PostCreationService()
+    print(result)
     return JsonResponse({'body': result})
 
   def get(self, request, id):

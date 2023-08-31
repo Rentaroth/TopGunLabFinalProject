@@ -7,6 +7,7 @@ class CategoryService(CategoryRepository):
   model = Categories
   def __init__(self, id=None):
     super().__init__()
+    self.self_instance = self
     self.id = id
 
   def CategoryGetService(self):

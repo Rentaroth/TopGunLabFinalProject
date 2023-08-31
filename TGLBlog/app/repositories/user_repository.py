@@ -11,6 +11,7 @@ from django.contrib.auth.hashers import check_password
 from django.shortcuts import get_object_or_404
 from django.forms import model_to_dict
 
+
 class UserRepository(BaseRepository):
   model = Users
   def __init__(self):
@@ -21,25 +22,31 @@ class UserRepository(BaseRepository):
     result = user_creation_task.get(timeout=None)
     if result != 'User not created':
       # confirm_mail.delay(to=data['email'], message='User was created.')
-      return result
+      return model_to_dict(result)
     else:
       return "User couldn't be created."
   
+  @shared_task
   def user_object_obtention(self):
+    obj = {}
     if self.id:
-      obj = self.read.delay(self, self.model, ObjectId(self.id))
+      obj = self.model.objects.get(_id=ObjectId(self.id))
     elif self.nickname:
       obj = get_object_or_404(self.model, nickname=self.nickname)
-      return obj
     elif self.email:
       obj = get_object_or_404(self.model, email=self.email)
-      return obj
-    result = obj.get(timeout=None)
-    return result
+    return obj
 
   @shared_task
   def login(self):
-    obj = self.user_objcet_obtention()
+    obj = {}
+    if self.id:
+      obj = self.model.objects.get(_id=ObjectId(self.id))
+    elif self.nickname:
+      obj = get_object_or_404(self.model, nickname=self.nickname)
+    elif self.email:
+      obj = get_object_or_404(self.model, email=self.email)
+    
     user_pass = model_to_dict(obj)
     
     if user_pass['password']:

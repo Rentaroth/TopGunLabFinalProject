@@ -42,24 +42,28 @@ class PostService(PostRepository):
     if validator.is_valid():
       validated = dict(validator.validated_data)
       user_instance = UserService(id=self.user_id)
-      user_obj = user_instance.user_object_obtention()
+      user_obj = user_instance.user_object_obtention.delay(user_instance.self_instance)
       category_instance = CategoryService(id=self.category_id)
-      category_obj = category_instance.obtain_one_category()
-      tag_instance = TagService(id=self.tag_id)
-      tag_obj = tag_instance.obtain_one_tag()
+      category_obj = category_instance.obtain_one_category.delay(category_instance.self_instance)
+      user_obj = user_obj.get(timeout=None)
+      category_obj = category_obj.get(timeout=None)
       validated.update({
         'user_id': user_obj,
         'category_id': category_obj,
         'created_at': validator.validated_data['created_at'].__str__(),
         'updated_at': validator.validated_data['updated_at'].__str__(),
       })
-      creation_task = self.create.delay(self, self.model, validated)
-      result = creation_task.get(timeout=None)
-      if type(result) == type({}):
-        result.update({
-          'user_id': self.user_id,
-          'category_id': self.category_id,
-        })
+      
+      async_obj = self.tag_insert.delay(self, validated)
+      result = async_obj.get(timeout=None)
+      result = model_to_dict(result)
+      result.update({
+        '_id': result['_id'].__str__(),
+        'user_id': result['user_id'].__str__(),
+        'category_id': result['category_id'].__str__(),
+        'tag_id': self.tag_id
+      })
+      print(result)
       return result
     else:
       print(validator.error_messages)
@@ -70,11 +74,13 @@ class PostService(PostRepository):
     obj = self.read.delay(self, self.model, id)
     result = obj.get(timeout=None)
     res = model_to_dict(result)
+    tags = [model_to_dict(x) for x in res['tag_id']]
+    tags_parsed = [x['_id'].__str__() for x in tags]
     res.update({
       '_id': res['_id'].__str__(),
       'user_id': res['user_id'].__str__(),
       'category_id': res['category_id'].__str__(),
-      'tag_id': res['tag _id'].__str__(),
+      'tag_id': tags_parsed,
     })
     return res
 
@@ -97,8 +103,14 @@ class PostService(PostRepository):
         result = self.update.delay(self, self.model, validated, id)
         res = result.get(timeout=None)
         res = model_to_dict(res)
-        res['_id'] = res['_id'].__str__()
-        res['user_id'] = res['user_id'].__str__()
+        tags = [model_to_dict(x) for x in res['tag_id']]
+        tags_parsed = [x['_id'].__str__() for x in tags]
+        res.update({
+          '_id': res['_id'].__str__(),
+          'user_id': res['user_id'].__str__(),
+          'category_id': res['category_id'].__str__(),
+          'tag_id': tags_parsed,
+        })
         return res
     except Exception as error:
       print(error)
@@ -135,7 +147,6 @@ class PostService(PostRepository):
     try:
       obj = self.post_search(filters)
       res = []
-      print(obj)
       for item in obj:
         res.append({ '_id': str(item._id), 'title': item.title, 'created_at': item.created_at })
       print(res)

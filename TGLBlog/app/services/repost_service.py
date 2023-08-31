@@ -25,16 +25,22 @@ class RepostService(RepostRepository):
       is_unique = self.verify_existance(validated['user_id'], validated['post_id'])
       if is_unique:
         user_entity = UserService(id=validated['user_id'])
-        user = user_entity.user_object_obtention()
+        user = user_entity.user_object_obtention.delay(user_entity)
         post_entity = PostService(id=validated['post_id'])
         post = post_entity.post_object_obtention()
+        user = user.get(timeout=None)
         validated.update({
           'user_id': user,
           'post_id': post,
         })
         async_obj = self.create.delay(self, self.model, validated)
         result = async_obj.get(timeout=None)
-        result.update(data)
+        result = model_to_dict(result)
+        result.update({
+          '_id': result['_id'].__str__(),
+          'user_id': result['user_id'].__str__(),
+          'post_id': result['post_id'].__str__(),
+        })
         return result
       else:
         raise Exception('Cannot repost twice.')

@@ -25,7 +25,7 @@ class LikesService(LikesRepository):
       is_unique = self.verify_like_existance(validated['user_id'], validated['post_id'])
       if is_unique:
         user_entity = UserService(id=validated['user_id'])
-        user = user_entity.user_object_obtention()
+        user = user_entity.user_object_obtention(user_entity)
         post_entity = PostService(id=validated['post_id'])
         post = post_entity.post_object_obtention()
         validated.update({
@@ -34,7 +34,12 @@ class LikesService(LikesRepository):
         })
         async_obj = self.create.delay(self, self.model, validated)
         result = async_obj.get(timeout=None)
-        result.update(data)
+        result = model_to_dict(result)
+        result.update({
+          '_id': result['_id'].__str__(),
+          'user_id': result['user_id'].__str__(),
+          'post_id': result['post_id'].__str__(),
+        })
         return result
       else:
         raise Exception('Cannot like twice.')

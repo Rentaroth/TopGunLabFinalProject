@@ -17,7 +17,6 @@ class LikesRepository(BaseRepository):
     result = self.model.objects.filter(query)
     res = []
     for obj in result:
-      print(obj)
       res.append(obj)
     if len(res) > 0:
       return False

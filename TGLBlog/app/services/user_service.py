@@ -12,6 +12,7 @@ class UserService(UserRepository):
   serializer = UserSerializer
   def __init__(self, id=None, name=None, nickname=None, password=None, country=None, email=None):
     super().__init__()
+    self.self_instance = self
     self.id = id
     self.name = name
     self.nickname = nickname
@@ -42,6 +43,10 @@ class UserService(UserRepository):
         'updated_at': validator.validated_data['updated_at'].__str__(),
       })
       result = self.create_and_send_confirmation_email(self.model, validated)
+      if result:
+        result.update({
+          '_id': result['_id'].__str__()
+        })
       return result
     else:
       print(validator.error_messages)

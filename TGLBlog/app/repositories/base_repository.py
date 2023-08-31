@@ -8,7 +8,7 @@ class BaseRepository:
     try:
       instance = model.objects.create(**data)
       instance.save()
-      return data
+      return instance
     except Exception as error:
       print(error)
       return 'Not created'

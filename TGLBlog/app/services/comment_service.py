@@ -33,7 +33,7 @@ class CommentService(CommentRepository):
         'created_at': validator['created_at'].__str__(),
       })
       user_instance = UserService(id=validated['user_id'])
-      user_obj = user_instance.user_object_obtention()
+      user_obj = user_instance.user_object_obtention(user_instance)
       post_instance = PostService(id=validated['post_id'])
       post_obj = post_instance.post_object_obtention()
       validated.update({
@@ -43,10 +43,12 @@ class CommentService(CommentRepository):
       try:
         obj = self.create.delay(self, self.model, validated)
         result = obj.get(timeout=None)
+        result = model_to_dict(result)
+        print(result)
         result.update({
-          'user_id': self.user_id,
-          'post_id': self.post_id,
-          'created_at': data['created_at'],
+          '_id': result['_id'].__str__(),
+          'user_id': result['user_id'].__str__(),
+          'post_id': result['post_id'].__str__(),
         })
         return result
       except Exception as err:

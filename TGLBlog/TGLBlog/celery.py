@@ -15,6 +15,8 @@ app.conf.update(CELERY_IMPORTS = (
   'app.tasks',
   'app.repositories.base_repository',
   'app.repositories.user_repository',
+  'app.repositories.tag_repository',
+  'app.repositories.category_repository',
   'app.utilities.country_data',
 ))
 app.conf.beat_schedule = {
