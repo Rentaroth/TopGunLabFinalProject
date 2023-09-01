@@ -19,3 +19,8 @@ urlpatterns = [
   path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
   path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc')
 ]
+
+documeted_routes = [
+  path('login', LoginView.as_view(), name='login'),
+  path('users', UsersView.as_view(), name='users')
+]
