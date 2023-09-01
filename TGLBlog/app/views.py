@@ -11,14 +11,14 @@ from .services.likes_service import LikesService
 from rest_framework.views import APIView
 from .models import *
 from .serializers import *
-from .utilities.decorators import error_handler
 from .utilities.country_data import country_catalog
 from drf_spectacular.utils import extend_schema
-from .docs.docs import POST_METHOD_DOCS
+from .docs.docs import *
 from drf_spectacular.types import OpenApiTypes
+from rest_framework.schemas.openapi import AutoSchema
 
 class LoginView(APIView):
-  @error_handler
+  @extend_schema(**POST_METHOD_LOGIN)
   def post(self, request):
     credentials = request.data['data']
     service = LoginService(**credentials)
@@ -26,21 +26,20 @@ class LoginView(APIView):
     return JsonResponse({'body': result})
 
 class UsersView(APIView):
-  @extend_schema(**POST_METHOD_DOCS)
-  @error_handler
+  @extend_schema(**POST_METHOD_USER, parameters=[])
   def post(self, request):
     data = request.data['data']
     service = UserService(**data)
     result = service.UserCreationService()
     return JsonResponse({'body': result})
 
-  @error_handler
+  @extend_schema(**GET_METHOD_USER)
   def get(self, request, id):
     service = UserService(id = id)
     result = service.UserGetService()             
     return JsonResponse({'body': result})
 
-  @error_handler
+  @extend_schema(**PUT_METHOD_USER)
   def put(self, request, id):
     data = request.data['data']
     data['id'] = id
@@ -48,14 +47,14 @@ class UsersView(APIView):
     result = service.UserUpdateService()
     return JsonResponse({'body': result})
 
-  @error_handler
+  @extend_schema(**DELETE_METHOD_USER)
   def delete(self, request, id):
     service = UserService(id=id)
     result = service.UserDeleteService()
     return JsonResponse({'body': result})
 
 class PostsView(APIView):
-  @error_handler
+  @extend_schema(**POST_METHOD_POSTS)
   def post(self, request):
     data = request.data['data']
     service = PostService(**data)
@@ -63,13 +62,13 @@ class PostsView(APIView):
     print(result)
     return JsonResponse({'body': result})
 
-  @error_handler
+  @extend_schema(**GET_METHOD_POSTS)
   def get(self, request, id):
     service = PostService(id = id)
     result = service.PostGetService()
     return JsonResponse({'body': result})
 
-  @error_handler
+  @extend_schema(**PUT_METHOD_POSTS)
   def put(self, request, id):
     data = request.data['data']
     data['id'] = id
@@ -77,14 +76,14 @@ class PostsView(APIView):
     result = service.PostUpdateService()
     return JsonResponse({'body': result})
 
-  @error_handler
+  @extend_schema(**DELETE_METHOD_POSTS)
   def delete(self, request, id):
     service = PostService(id=id)
     result = service.PostDeleteService()
     return JsonResponse({'body': result})
 
 class RepostView(APIView):
-  @error_handler
+  @extend_schema(**POST_METHOD_REPOSTS)
   def post(self, request, id):
     data = request.data['data']
     data.update({
@@ -95,7 +94,7 @@ class RepostView(APIView):
     return JsonResponse({'body': result})
 
 class LikesView(APIView):
-  @error_handler
+  @extend_schema(**POST_METHOD_LIKES)
   def post(self, request, id):
     data = request.data['data']
     data.update({
@@ -106,20 +105,20 @@ class LikesView(APIView):
     return JsonResponse({'body': result})
 
 class CommentsView(APIView):
-  @error_handler
+  @extend_schema(**POST_METHOD_COMMENTS)
   def post(self, request):
     data = request.data['data']
     service = CommentService(**data)
     result = service.CommentCreationService()
     return JsonResponse({'body': result})
 
-  @error_handler
+  @extend_schema(**GET_METHOD_COMMENTS)
   def get(self, request, id):
     service = CommentService(id = id)
     result = service.CommentGetService()
     return JsonResponse({'body': result})
 
-  @error_handler
+  @extend_schema(**PUT_METHOD_COMMENTS)
   def put(self, request, id):
     data = request.data['data']
     data['id'] = id
@@ -127,28 +126,28 @@ class CommentsView(APIView):
     result = service.CommentUpdateService()
     return JsonResponse({'body': result})
 
-  @error_handler
+  @extend_schema(**DELETE_METHOD_COMMENTS)
   def delete(self, request, id):
     service = CommentService(id=id)
     result = service.CommentDeleteService()
     return JsonResponse({'body': result})
 
 class CategoriesView(APIView):
-  @error_handler
+  @extend_schema(**GET_METHOD_CATEGORIES)
   def get(self, request):
     service = CategoryService()
     result = service.CategoryGetService()
     return JsonResponse({'body': result})
 
 class TagsView(APIView):
-  @error_handler
+  @extend_schema(**GET_METHOD_TAGS)
   def get(self, request):
     service = TagService()
     result = service.TagGetService()
     return JsonResponse({'body': result})
 
 class SearchView(APIView):
-  @error_handler
+  @extend_schema(**POST_METHOD_SEARCHBAR)
   def post(self, request):
     data = request.data['data']
     service = PostService(**data)
