@@ -3,7 +3,6 @@ from app.serializers import PostsLikesSerializer
 from .user_service import UserService
 from .post_service import PostService
 
-from django.utils import timezone
 from django.forms import model_to_dict
 
 class LikesService(LikesRepository):

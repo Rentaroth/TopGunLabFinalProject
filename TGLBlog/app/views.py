@@ -18,7 +18,6 @@ from .docs.docs import POST_METHOD_DOCS
 from drf_spectacular.types import OpenApiTypes
 
 class LoginView(APIView):
-  @error_handler
   def post(self, request):
     credentials = request.data['data']
     service = LoginService(**credentials)
@@ -27,20 +26,19 @@ class LoginView(APIView):
 
 class UsersView(APIView):
   @extend_schema(**POST_METHOD_DOCS)
-  @error_handler
+  # @error_handler
   def post(self, request):
     data = request.data['data']
     service = UserService(**data)
     result = service.UserCreationService()
+    print(result)
     return JsonResponse({'body': result})
 
-  @error_handler
   def get(self, request, id):
     service = UserService(id = id)
     result = service.UserGetService()             
     return JsonResponse({'body': result})
 
-  @error_handler
   def put(self, request, id):
     data = request.data['data']
     data['id'] = id
@@ -48,14 +46,12 @@ class UsersView(APIView):
     result = service.UserUpdateService()
     return JsonResponse({'body': result})
 
-  @error_handler
   def delete(self, request, id):
     service = UserService(id=id)
     result = service.UserDeleteService()
     return JsonResponse({'body': result})
 
 class PostsView(APIView):
-  @error_handler
   def post(self, request):
     data = request.data['data']
     service = PostService(**data)
@@ -63,13 +59,11 @@ class PostsView(APIView):
     print(result)
     return JsonResponse({'body': result})
 
-  @error_handler
   def get(self, request, id):
     service = PostService(id = id)
     result = service.PostGetService()
     return JsonResponse({'body': result})
 
-  @error_handler
   def put(self, request, id):
     data = request.data['data']
     data['id'] = id
@@ -77,14 +71,12 @@ class PostsView(APIView):
     result = service.PostUpdateService()
     return JsonResponse({'body': result})
 
-  @error_handler
   def delete(self, request, id):
     service = PostService(id=id)
     result = service.PostDeleteService()
     return JsonResponse({'body': result})
 
 class RepostView(APIView):
-  @error_handler
   def post(self, request, id):
     data = request.data['data']
     data.update({
@@ -95,7 +87,6 @@ class RepostView(APIView):
     return JsonResponse({'body': result})
 
 class LikesView(APIView):
-  @error_handler
   def post(self, request, id):
     data = request.data['data']
     data.update({
@@ -106,20 +97,17 @@ class LikesView(APIView):
     return JsonResponse({'body': result})
 
 class CommentsView(APIView):
-  @error_handler
   def post(self, request):
     data = request.data['data']
     service = CommentService(**data)
     result = service.CommentCreationService()
     return JsonResponse({'body': result})
 
-  @error_handler
   def get(self, request, id):
     service = CommentService(id = id)
     result = service.CommentGetService()
     return JsonResponse({'body': result})
 
-  @error_handler
   def put(self, request, id):
     data = request.data['data']
     data['id'] = id
@@ -127,28 +115,24 @@ class CommentsView(APIView):
     result = service.CommentUpdateService()
     return JsonResponse({'body': result})
 
-  @error_handler
   def delete(self, request, id):
     service = CommentService(id=id)
     result = service.CommentDeleteService()
     return JsonResponse({'body': result})
 
 class CategoriesView(APIView):
-  @error_handler
   def get(self, request):
     service = CategoryService()
     result = service.CategoryGetService()
     return JsonResponse({'body': result})
 
 class TagsView(APIView):
-  @error_handler
   def get(self, request):
     service = TagService()
     result = service.TagGetService()
     return JsonResponse({'body': result})
 
 class SearchView(APIView):
-  @error_handler
   def post(self, request):
     data = request.data['data']
     service = PostService(**data)

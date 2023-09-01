@@ -43,6 +43,7 @@ class UserService(UserRepository):
         'updated_at': validator.validated_data['updated_at'].__str__(),
       })
       result = self.create_and_send_confirmation_email(self.model, validated)
+      print(result, 'method')
       if result:
         result.update({
           '_id': result['_id'].__str__()

@@ -4,8 +4,6 @@ from app.services.user_service import UserService
 from app.services.post_service import PostService
 
 from django.utils import timezone
-from django.contrib.auth.hashers import make_password
-from rest_framework import status
 from django.forms import model_to_dict
 from bson import ObjectId
 
