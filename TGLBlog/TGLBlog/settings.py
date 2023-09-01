@@ -165,7 +165,31 @@ SPECTACULAR_SETTINGS = {
 
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
-    # ... otras configuraciones ...
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        # Otras clases de autenticación, si las tienes
+    ),
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'TGLBlog',
+    'DESCRIPTION': 'A blog where you can post anything.',
+    'VERSION': '1.0.0',
+    'SERVERS': [
+        {'url': 'https://localhost', 'description': 'Servidor principal'},
+    ],
+    'SECURITY_DEFINITIONS': {
+        'Bearer Token': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header',
+            'description': 'JWT token',
+        },
+    },
+    'SERVE_URLCONFS': [
+        'app.urls.urlpatterns.users',  # Reemplaza 'miapp.urls' con la ubicación de tus rutas en tu proyecto
+        # Agrega más rutas o vistas si es necesario
+    ],
 }
 #Redis
 

@@ -60,3 +60,19 @@ class CategorySerializer(serializers.Serializer):
   class Meta:
     model = Categories
     fields = '__all__'
+
+class TagsSerializer(serializers.Serializer):
+  category = serializers.CharField()
+
+  class Meta:
+    model = Tags
+    fields = '__all__'
+
+class LoginSerializer(serializers.Serializer):
+  nickname = serializers.CharField(max_length=20, required=False)
+  password = serializers.CharField(min_length=8)
+  email = serializers.EmailField(required=False)
+
+  class Meta:
+    model = Users
+    fields = '__all__'
