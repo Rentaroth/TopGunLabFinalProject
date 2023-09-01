@@ -2,10 +2,8 @@ import jwt
 from django.core.cache import cache
 from django.http import HttpResponse
 
-from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from rest_framework import status
-from django.db import IntegrityError
-from django.http import Http404
+from rest_framework.exceptions import APIException
 
 def error_handler(function):
   def handler(*args, **kwargs):
@@ -20,6 +18,9 @@ def error_handler(function):
     except jwt.InvalidTokenError:
       print(str(err))
       print("Invalid JWT Token")
+    except APIException as err:
+      print(str(err))
+      return HttpResponse({"error": 'Something went wrong!' }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     except TypeError as err:
       print(str(err))
       return HttpResponse({"error": 'Something went wrong!' }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

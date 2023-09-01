@@ -36,6 +36,8 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     "app",
     "rest_framework",
+    'drf_spectacular',
+    'drf_spectacular_sidecar',
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -149,6 +151,22 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# DOCS drf-spectacular-sidecar
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'TGLBlog',
+    'DESCRIPTION': 'Blog of whatever you want to share.',
+    'VERSION': '1.0.0',
+    'SWAGGER_UI_DIST': 'SIDECAR',  # shorthand to use the sidecar instead
+    'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
+    'REDOC_DIST': 'SIDECAR',
+    'SERVE_INCLUDE_SCHEMA': False,
+    # OTHER SETTINGS
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    # ... otras configuraciones ...
+}
 #Redis
 
 BROKER_URL = os.getenv('REDIS_URI')
