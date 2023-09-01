@@ -1,11 +1,9 @@
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from rest_framework.test import APIClient
 from django.urls import reverse
-from bson import ObjectId
-
 from app.services.user_service import UserService
 
-class TestCaseUserService:
+class TestCaseUserView:
   def test_post_user_method(self, mocker):
     #Gets the endpoint url
     url = reverse('users')
@@ -145,11 +143,11 @@ class TestCaseUserService:
     client = APIClient()
 
     #Stub for service function
-    user_update_service_stub = mocker.stub(name='user_delete_service_stub')
+    user_delete_service_stub = mocker.stub(name='user_delete_service_stub')
     user_instance_creation = mocker.spy(obj=UserService, name='__init__')
 
     #Return of the service function
-    user_update_service_stub.return_value = {
+    user_delete_service_stub.return_value = {
       "_id": "64f0f03d1c6b47a329d1c9ad",
       "name": "Nadia",
       "nickname": "Nad",
@@ -161,7 +159,7 @@ class TestCaseUserService:
     }
 
     #Binding stub to service function
-    mocker.patch('app.services.user_service.UserService.UserUpdateService', user_update_service_stub)
+    mocker.patch('app.services.user_service.UserService.UserDeleteService', user_delete_service_stub)
     mocker.patch('app.services.user_service.UserService', return_value=user_instance_creation)
 
     #Dummy data that corresponds to return_value
@@ -174,9 +172,9 @@ class TestCaseUserService:
     }
 
     #PUT request using API client
-    response = client.put(url, data=dummy_data, format='json')
+    response = client.delete(url, data=dummy_data, format='json')
 
     #Asserts
     assert user_instance_creation.call_count == 1
-    user_update_service_stub.assert_called_once()
+    user_delete_service_stub.assert_called_once()
     assert isinstance(response, JsonResponse)

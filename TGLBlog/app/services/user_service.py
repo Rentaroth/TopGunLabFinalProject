@@ -44,7 +44,7 @@ class UserService(UserRepository):
       })
       result = self.create_and_send_confirmation_email(self.model, validated)
       print(result, 'method')
-      if result:
+      if type(result) != type('str'):
         result.update({
           '_id': result['_id'].__str__()
         })

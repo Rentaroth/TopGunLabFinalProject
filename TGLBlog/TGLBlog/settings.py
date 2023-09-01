@@ -54,6 +54,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "app.middlewares.jwt_auth.JWTAuth",
 ]
 
 ROOT_URLCONF = "TGLBlog.urls"
@@ -152,16 +153,16 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # DOCS drf-spectacular-sidecar
-SPECTACULAR_SETTINGS = {
-    'TITLE': 'TGLBlog',
-    'DESCRIPTION': 'Blog of whatever you want to share.',
-    'VERSION': '1.0.0',
-    'SWAGGER_UI_DIST': 'SIDECAR',  # shorthand to use the sidecar instead
-    'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
-    'REDOC_DIST': 'SIDECAR',
-    'SERVE_INCLUDE_SCHEMA': False,
-    # OTHER SETTINGS
-}
+# SPECTACULAR_SETTINGS = {
+#     'TITLE': 'TGLBlog',
+#     'DESCRIPTION': 'Blog of whatever you want to share.',
+#     'VERSION': '1.0.0',
+#     'SWAGGER_UI_DIST': 'SIDECAR',  # shorthand to use the sidecar instead
+#     'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
+#     'REDOC_DIST': 'SIDECAR',
+#     'SERVE_INCLUDE_SCHEMA': False,
+#     # OTHER SETTINGS
+# }
 
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
@@ -191,6 +192,10 @@ SPECTACULAR_SETTINGS = {
         # Agrega más rutas o vistas si es necesario
     ],
 }
+
+# TEST
+ENVIRONMENT = os.getenv('ENVIRONMENT')
+
 #Redis
 
 BROKER_URL = os.getenv('REDIS_URI')

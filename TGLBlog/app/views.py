@@ -13,7 +13,6 @@ from .models import *
 from .serializers import *
 from drf_spectacular.utils import extend_schema
 from .docs.docs import *
-from drf_spectacular.types import OpenApiTypes
 from rest_framework.schemas.openapi import AutoSchema
 from django.core.cache import cache
 
@@ -61,11 +60,9 @@ class PostViewNoId(APIView):
     data = request.data['data']
     service = PostService(**data)
     result = service.PostCreationService()
-    print(result)
     return JsonResponse({'body': result})
 
 class PostsView(APIView):
-
   @extend_schema(**GET_METHOD_POSTS)
   def get(self, request, id):
     service = PostService(id = id)

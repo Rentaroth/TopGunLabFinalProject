@@ -15,12 +15,7 @@ urlpatterns = [
   path('tags', TagsView.as_view(), name='tags'),
   path('repost/<str:id>', RepostView.as_view(), name='repost'),
   path('likes/<str:id>', LikesView.as_view(), name='likes'),
-  path('schema', SpectacularAPIView.as_view(), name='schema'),
   path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
-  path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc')
-]
-
-documeted_routes = [
-  path('login', LoginView.as_view(), name='login'),
-  path('users', UsersView.as_view(), name='users')
+  path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+  path('schema', SpectacularAPIView.as_view(), name='schema'),
 ]

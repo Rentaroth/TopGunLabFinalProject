@@ -1,5 +1,4 @@
 import jwt
-from django.core.cache import cache
 from django.http import HttpResponse
 
 from rest_framework import status
@@ -28,14 +27,3 @@ def error_handler(function):
       print(str(err))
       return HttpResponse({"error": 'Something went wrong!' }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
   return handler
-
-
-def jwt_security_breach(function):
-  @error_handler
-  def security(self, request, *args, **kwargs):
-    token = request.META.get('HTTP_AUTHORIZATION')
-    validated = jwt.decode(token[7:], verify=True, algorithms=['HS256'])
-    if validated:
-      cache.set(f'token', validated, 900)
-    return function(self, request, *args, **kwargs)
-  return security
