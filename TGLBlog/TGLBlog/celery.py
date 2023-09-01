@@ -20,11 +20,11 @@ app.conf.update(CELERY_IMPORTS = (
   'app.utilities.country_data',
 ))
 app.conf.beat_schedule = {
-    'my-periodic-task': {
-        'task': 'app.utilities.country_data.periodic_country_api_call',
-        'schedule': 3600,  # Intervalo de tiempo entre ejecuciones
-        'options': {'expires': 60}
-    },
+  'countries': {
+    'task': 'app.utilities.country_data.periodic_country_api_call',
+    'schedule': 3600,  # Intervalo de tiempo entre ejecuciones
+    'options': {'expires': 60}
+  },
 }
 
 def on_failure(exc, task_id, args, kwargs, einfo):

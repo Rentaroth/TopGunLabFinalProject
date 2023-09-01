@@ -10,7 +10,7 @@ class BaseRepository:
       instance.save()
       return instance
     except Exception as error:
-      print(error)
+      print(error.__str__())
       return 'Not created'
 
   @shared_task

@@ -1,4 +1,4 @@
-import time,requests
+import time, requests
 from django.core.cache import cache
 from celery import shared_task
 import json
@@ -27,4 +27,5 @@ def country_filter(selected):
       return country['cca3']
 
 if __name__ == '__main__':
-  periodic_country_api_call.apply_async()
+  if not cache.has_key('countries'):
+    periodic_country_api_call.apply_async()

@@ -20,7 +20,8 @@ class UserRepository(BaseRepository):
   def create_and_send_confirmation_email(self, model, data):
     user_creation_task = self.create.delay(self, model, data)
     result = user_creation_task.get(timeout=None)
-    if result != 'User not created':
+    print(result)
+    if result != 'Not created':
       # confirm_mail.delay(to=data['email'], message='User was created.')
       return model_to_dict(result)
     else:

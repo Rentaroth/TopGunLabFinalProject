@@ -172,6 +172,12 @@ REST_FRAMEWORK = {
 }
 
 SPECTACULAR_SETTINGS = {
+    'TITLE': 'TGLBlog',
+    'DESCRIPTION': 'A blog where you can post anything.',
+    'VERSION': '1.0.0',
+    'SERVERS': [
+        {'url': 'https://localhost', 'description': 'Servidor principal'},
+    ],
     'SECURITY_DEFINITIONS': {
         'Bearer Token': {
             'type': 'apiKey',
