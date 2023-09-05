@@ -28,6 +28,25 @@ Listas de tecnologías utilizadas en el proyecto:
 git clone https://github.com/Rentaroth/TopGunLabFinalProject.git
 Con este link puedes clonar el repositorio usando git.
 ***
+## Uso
+***
+* [env]: En el archivo .env puedes cambiar la variable de entorno "ENVIRONMENT" entre dev, prod y test. En el estado actual solo hay cambios para "test".
+  Al establecer el entorno de test se desactivará la validación por Json Web Token lo que permitirá hacer el testing más fácilmente, si la variable no es "test" entonces la seguridad es activada.
+* [start]: Instalar las dependencias listadas en el archivo requirements.txt con 'pip install', puedes iniciar el server en modo desarrollo con 'python manage.py runserver'.
+
+* [API]:
+  - Crea un usuario haciendo una petición post en la dirección '#/users', ten en cuenta la estructura de los datos de entrada.
+  - Luego podrás crear posts y comentarios. Para ello los id de las categorías y tags para los posts serían:
+
+    a. categories:
+      - 64f779cf2b84651599fb5328
+      - 64f779dc2b84651599fb5329
+
+    b. tags:
+      - 64f779ac2b84651599fb5326
+      - 64f779bb2b84651599fb5327
+  - Por ahora es recomendable utilizar postman o insomnia.
+***
 ## Docs
 ***
 Este es el link de la documentación.
