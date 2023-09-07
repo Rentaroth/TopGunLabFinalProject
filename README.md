@@ -33,6 +33,10 @@ Con este link puedes clonar el repositorio usando git.
 * [env]: En el archivo .env puedes cambiar la variable de entorno "ENVIRONMENT" entre dev, prod y test. En el estado actual solo hay cambios para "test".
   Al establecer el entorno de test se desactivará la validación por Json Web Token lo que permitirá hacer el testing más fácilmente, si la variable no es "test" entonces la seguridad es activada.
 * [start]: Instalar las dependencias listadas en el archivo requirements.txt con 'pip install', puedes iniciar el server en modo desarrollo con 'python manage.py runserver'.
+  a. Windows
+    - En una terminal iniciar primero celery worker con el comando "celery -A TGLBlog worker -l INFO"
+    - En otra terminal iniciar luego celery beat con el comando "celery -A TGLBlog.celery:app beat -l DEBUG"
+    - En otra terminal ejecutar el servidor de desarrollo de django con el comando "python manage.py runserver"
 
 * [API]:
   - Crea un usuario haciendo una petición post en la dirección '#/users', ten en cuenta la estructura de los datos de entrada.
