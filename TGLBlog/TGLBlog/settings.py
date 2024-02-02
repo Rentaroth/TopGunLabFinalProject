@@ -28,7 +28,7 @@ SECRET_KEY = os.getenv('SECRET_JWT')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -55,6 +55,8 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "app.middlewares.jwt_auth.JWTAuth",
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = "TGLBlog.urls"
@@ -76,6 +78,9 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "TGLBlog.wsgi.application"
+
+#Cors
+CORS_ORIGIN_ALLOW_ALL = True
 
 
 # Database

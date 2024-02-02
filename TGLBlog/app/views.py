@@ -14,7 +14,6 @@ from .serializers import *
 from drf_spectacular.utils import extend_schema
 from .docs.docs import *
 from rest_framework import status
-from django.core.cache import cache
 
 class LoginView(APIView):
   def post(self, request):

@@ -63,7 +63,6 @@ class PostService(PostRepository):
         'category_id': result['category_id'].__str__(),
         'tag_id': self.tag_id
       })
-      print(result)
       return result
     else:
       print(validator.error_messages)

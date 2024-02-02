@@ -20,12 +20,12 @@ def setting_countries_in_cache(data):
 
 def country_filter(selected):
   all_country_data = cache.get('countries')
-  
   for country in all_country_data:
     name = country['name']['common']
     if name == selected:
       return country['cca3']
 
 if __name__ == '__main__':
+  print(cache.has_key('countries'))
   if not cache.has_key('countries'):
     periodic_country_api_call.apply_async()
